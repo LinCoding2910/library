@@ -1,4 +1,4 @@
-const myLibrary = [];
+let myLibrary = [];
 
 function Book(title, author, pages, status) {
     this.title = title
@@ -33,14 +33,11 @@ function displayLibrary() {
         .join("");
 }
 
-function addBookToLibrary(title, author, pages, read) {
-    let newBook = new Book(title, author, pages, read);
+function addBookToLibrary(title, author, pages, status) {
+    let newBook = new Book(title, author, pages, status);
     myLibrary.push(newBook);
-    console.log(title,author,pages,read);
     displayLibrary();
 }
-
-addBookToLibrary("The Hobbit", "J.R.R.Tolkien", 295, 'finished');
 
 const openModal = document.getElementById("open-button");
 const modal = document.getElementById("modal");
@@ -62,6 +59,24 @@ form.addEventListener('submit', function(event) {
 
     addBookToLibrary(title, author, pages, status);
 
+    deleteBook();
+
     this.reset(); 
     modal.close();
 })
+
+function deleteBook() {
+    let deleteButtons = document.querySelectorAll('.delete');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const book = button.parentElement.parentElement;
+            book.remove();
+
+            const bookTitle = button.parentElement.previousElementSibling.firstElementChild.innerHTML;
+            myLibrary = myLibrary.filter(book => book.title !== bookTitle);
+        });
+    });
+}
+
+deleteBook();

@@ -19,13 +19,6 @@ header {
     font-size: 3.5rem;
 }
 
-#sign-up-button {
-    padding: 5px;
-    font-size: 1.5em;
-    font-weight: bold;
-
-}
-
 main {
     padding: 20px;
 }
@@ -43,11 +36,3 @@ main {
 .book {
     font-size: 1.5em;
 }
-
-button {
-    font-size: 0.8em;
-    
-}
-
-
-
