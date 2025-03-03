@@ -39,6 +39,8 @@ function addBookToLibrary(title, author, pages, status) {
     displayLibrary();
 }
 
+addBookToLibrary('Harry Garry', 'Marry', 235, 'finished')
+
 const openModal = document.getElementById("open-button");
 const modal = document.getElementById("modal");
 const form = document.getElementById('form');
@@ -60,6 +62,7 @@ form.addEventListener('submit', function(event) {
     addBookToLibrary(title, author, pages, status);
 
     deleteBook();
+    changeStatusOfBook();
 
     this.reset(); 
     modal.close();
@@ -71,12 +74,38 @@ function deleteBook() {
     deleteButtons.forEach(button => {
         button.addEventListener('click', () => {
             const book = button.parentElement.parentElement;
+            const bookTitle = book.firstElementChild.firstElementChild.innerHTML;
+            
             book.remove();
-
-            const bookTitle = button.parentElement.previousElementSibling.firstElementChild.innerHTML;
             myLibrary = myLibrary.filter(book => book.title !== bookTitle);
         });
     });
 }
 
 deleteBook();
+
+function changeStatusOfBook() {
+    let changeStatusButtons = document.querySelectorAll('.change-status');
+
+    changeStatusButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const bookTitle = button.parentElement.previousElementSibling.firstElementChild.innerHTML;
+            const book = myLibrary.find(book => book.title === bookTitle);
+
+            let bookStatus = button.parentElement.previousElementSibling.lastElementChild;
+
+            if (book.status === 'Not Read') {
+                book.status = 'In Progress';
+                bookStatus.innerHTML = 'Completion: '+book.status;
+            } else if (book.status === 'In Progress') {
+                book.status = 'Finished';
+                bookStatus.innerHTML = 'Completion: '+book.status;
+            } else {
+                book.status = 'Not Read';
+                bookStatus.innerHTML = 'Completion: '+book.status;
+            };
+        });
+    });
+}
+
+changeStatusOfBook();
