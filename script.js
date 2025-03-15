@@ -1,6 +1,7 @@
 let myLibrary = [];
 
-function Book(title, author, pages, status) {
+function Book(index, title, author, pages, status) {
+    this.index = index;
     this.title = title
     this.author = author
     this.pages = pages
@@ -16,30 +17,43 @@ function Book(title, author, pages, status) {
 const bookList = document.getElementById("booklist");
 
 function displayLibrary() {
-    bookList.innerHTML = myLibrary
-        .map(book => 
-            `<div class='book'>
-                <div class='book-info'>
-                    <div>${book.title}</div>
-                    <div>${'By: '+book.author}</div>
-                    <div>${'Pages: '+book.pages}</div>
-                    <div>${'Completion: '+book.status}</div>
-                </div> 
-                <div class='book-options'>
-                    <button class='change-status'>Change Status</button>
-                    <button class='delete'>Delete</button>
-                </div>               
-            </div>`)
-        .join("");
+    bookList.innerHTML = "";
+    myLibrary.forEach((book) => {
+        const bookElement = document.createElement("div");
+        bookElement.className = "books";
+        bookElement.dataset.index = book.index;
+        bookElement.dataset.id = book.title;
+        bookElement.dataset.status = book.status;
+        bookElement.innerHTML =
+            `<div class="book-info">
+                <div>${book.title}</div> 
+                <div>By: ${book.author}</div> 
+                <div>Pages: ${book.pages}</div> 
+                <div>Completion: ${book.status}</div> 
+            </div>
+            <div class="book-options">
+            <button class="change-status">Change Status</button>
+            <button class="delete">Delete</button>
+            </div>`;
+
+        bookList.appendChild(bookElement);
+    });
+
+    deleteBook();
+    changeStatusOfBook();
 }
 
 function addBookToLibrary(title, author, pages, status) {
-    let newBook = new Book(title, author, pages, status);
+    const index = myLibrary.length;  
+    const newBook = new Book(index, title, author, pages, status);
     myLibrary.push(newBook);
     displayLibrary();
 }
 
-addBookToLibrary('Harry Garry', 'Marry', 235, 'finished')
+addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
+addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
+addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
+addBookToLibrary('Kirby Quirky', 'Picky', 9, 'not-read');
 
 const openModal = document.getElementById("open-button");
 const modal = document.getElementById("modal");
@@ -61,9 +75,6 @@ form.addEventListener('submit', function(event) {
 
     addBookToLibrary(title, author, pages, status);
 
-    deleteBook();
-    changeStatusOfBook();
-
     this.reset(); 
     modal.close();
 })
@@ -71,41 +82,47 @@ form.addEventListener('submit', function(event) {
 function deleteBook() {
     let deleteButtons = document.querySelectorAll('.delete');
 
-    deleteButtons.forEach(button => {
+    deleteButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const book = button.parentElement.parentElement;
-            const bookTitle = book.firstElementChild.firstElementChild.innerHTML;
-            
-            book.remove();
-            myLibrary = myLibrary.filter(book => book.title !== bookTitle);
+            const bookElement = button.parentElement.parentElement;
+            const book = myLibrary[bookElement.dataset.index];
+
+            myLibrary.splice(book.index, 1);
+            updateIndexes();
+            displayLibrary();
         });
     });
 }
-
-deleteBook();
 
 function changeStatusOfBook() {
     let changeStatusButtons = document.querySelectorAll('.change-status');
 
-    changeStatusButtons.forEach(button => {
+    changeStatusButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const bookTitle = button.parentElement.previousElementSibling.firstElementChild.innerHTML;
-            const book = myLibrary.find(book => book.title === bookTitle);
-
-            let bookStatus = button.parentElement.previousElementSibling.lastElementChild;
+            // const bookTitle = button.parentElement.previousElementSibling.firstElementChild.innerHTML;
+            const bookElement = button.parentElement.parentElement; 
+            const book = myLibrary[bookElement.dataset.index];
 
             if (book.status === 'Not Read') {
                 book.status = 'In Progress';
-                bookStatus.innerHTML = 'Completion: '+book.status;
             } else if (book.status === 'In Progress') {
                 book.status = 'Finished';
-                bookStatus.innerHTML = 'Completion: '+book.status;
             } else {
                 book.status = 'Not Read';
-                bookStatus.innerHTML = 'Completion: '+book.status;
             };
+
+            displayLibrary();
         });
     });
 }
 
-changeStatusOfBook();
+function updateIndexes () {
+    myLibrary.forEach((book, i) => {
+        book.index = i;
+
+        const bookElement = document.querySelector(`[data-id="${book.title}]`);
+        if (bookElement) {
+            bookElement.dataset.index = i;
+        };
+    });
+}
