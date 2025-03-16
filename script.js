@@ -16,6 +16,13 @@ function Book(index, title, author, pages, status) {
 
 const bookList = document.getElementById("booklist");
 
+function addBookToLibrary(title, author, pages, status) {
+    const index = myLibrary.length;  
+    const newBook = new Book(index, title, author, pages, status);
+    myLibrary.push(newBook);
+    displayLibrary();
+}
+
 function displayLibrary() {
     bookList.innerHTML = "";
     myLibrary.forEach((book) => {
@@ -43,13 +50,6 @@ function displayLibrary() {
     changeStatusOfBook();
 }
 
-function addBookToLibrary(title, author, pages, status) {
-    const index = myLibrary.length;  
-    const newBook = new Book(index, title, author, pages, status);
-    myLibrary.push(newBook);
-    displayLibrary();
-}
-
 addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
 addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
 addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
@@ -61,6 +61,10 @@ const form = document.getElementById('form');
 
 openModal.addEventListener('click', () => {
     modal.showModal();
+})
+
+document.addEventListener("keyup", function(event) {
+    if (event.key === "b") modal.showModal(); 
 })
 
 form.addEventListener('submit', function(event) {
