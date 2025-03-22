@@ -40,7 +40,7 @@ function displayLibrary() {
             </div>
             <div class="book-options">
             <button class="change-status">Change Status</button>
-            <button class="delete">Delete</button>
+            <button class="delete"><span class="material-symbols-outlined">delete</span></button>
             </div>`;
 
         bookList.appendChild(bookElement);
@@ -50,14 +50,9 @@ function displayLibrary() {
     changeStatusOfBook();
 }
 
-addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
-addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
-addBookToLibrary('Harry Garry', 'Marry', 235, 'finished');
-addBookToLibrary('Kirby Quirky', 'Picky', 9, 'not-read');
-
-const openModal = document.getElementById("open-button");
+const openModal = document.getElementById("open-form-button");
 const modal = document.getElementById("modal");
-const form = document.getElementById('form');
+const form = document.getElementById('book-form');
 
 openModal.addEventListener('click', () => {
     modal.showModal();
@@ -103,7 +98,6 @@ function changeStatusOfBook() {
 
     changeStatusButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            // const bookTitle = button.parentElement.previousElementSibling.firstElementChild.innerHTML;
             const bookElement = button.parentElement.parentElement; 
             const book = myLibrary[bookElement.dataset.index];
 
@@ -130,3 +124,11 @@ function updateIndexes () {
         };
     });
 }
+
+//display of shortcut feature to opening form for new book
+
+let featureButton = document.getElementById("features-button");
+
+featureButton.addEventListener("click", function() {
+    alert("Press B on keyboard to create new book!");
+})
