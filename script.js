@@ -23,6 +23,8 @@ function addBookToLibrary(title, author, pages, status) {
     displayLibrary();
 }
 
+addBookToLibrary("Example Book", "An Author", 101, "Finished");
+
 function displayLibrary() {
     bookList.innerHTML = "";
     myLibrary.forEach((book) => {
